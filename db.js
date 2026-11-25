@@ -1,0 +1,26 @@
+const Database = require("better-sqlite3")
+
+const db = require("better-sqlite3")
+
+db.pragma("foreign_keys = ON")
+
+db.exec(`
+    CREATE TABLE IF NOT EXISTS projects(
+        id INTEGER PIMARY_KEY AUTOINCREMENT,
+        title TEXT NOT NULL,
+        created_at TEXT NOT NULL DEFAULT (datetime('now'))
+    );
+
+    CREATE TABLE IF NOT EXISTS tasks(
+        id INTEGER PRIMARY_KEY AUTOINCREMENT,
+        project_id INTEGER NOT NULL,
+        title TEXT NOT NULL,
+        done INTEGER NOT NULL DEFAULT 0 CHECK (done IN (0, 1)),
+        created_at TEXT NOT NULL DEFAULT (datetime('now')),
+        FOREIGN_KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
+    );
+    `)
+
+module.exports = db
+
+//Тестовое изменение файла для апдейта
